@@ -9,8 +9,9 @@ import (
 
 	i "github.com/bhanupbalusu/custpreorderms/api/controller_interface"
 	s "github.com/bhanupbalusu/custpreorderms/domain/application_interface/service"
-	m "github.com/bhanupbalusu/custpreorderms/domain/model"
-	u "github.com/bhanupbalusu/custpreorderms/pkg/util/user_auth"
+	m "github.com/bhanupbalusu/custpreorderms/domain/model/user_auth"
+	u "github.com/bhanupbalusu/custpreorderms/pkg/util"
+	e "github.com/bhanupbalusu/custpreorderms/pkg/util/user_auth"
 	sec "github.com/bhanupbalusu/custpreorderms/security/user_auth"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -41,7 +42,7 @@ func (uac *UserAuthController) SignUp(ctx *fiber.Ctx) error {
 	if !govalidator.IsEmail(newUser.Email) {
 		return ctx.
 			Status(http.StatusBadRequest).
-			JSON(u.NewJError(u.ErrInvalidEmail))
+			JSON(u.NewJError(e.ErrInvalidEmail))
 	}
 	fmt.Println("---------Controller SignUp before calling Application.GetByEmail---------")
 	exists, err := uac.uas.GetByEmail(newUser.Email)
@@ -49,7 +50,7 @@ func (uac *UserAuthController) SignUp(ctx *fiber.Ctx) error {
 		if strings.TrimSpace(newUser.Password) == "" {
 			return ctx.
 				Status(http.StatusBadRequest).
-				JSON(u.NewJError(u.ErrEmptyPassword))
+				JSON(u.NewJError(e.ErrEmptyPassword))
 		}
 		newUser.Password, err = sec.EncryptPassword(newUser.Password)
 		if err != nil {
@@ -72,7 +73,7 @@ func (uac *UserAuthController) SignUp(ctx *fiber.Ctx) error {
 			JSON(newUser)
 	}
 	if exists != nil {
-		err = u.ErrEmailAlreadyExists
+		err = e.ErrEmailAlreadyExists
 	}
 	return ctx.
 		Status(http.StatusBadRequest).
@@ -91,7 +92,7 @@ func (uac *UserAuthController) SignIn(ctx *fiber.Ctx) error {
 	if !govalidator.IsEmail(input.Email) {
 		return ctx.
 			Status(http.StatusBadRequest).
-			JSON(u.NewJError(u.ErrInvalidEmail))
+			JSON(u.NewJError(e.ErrInvalidEmail))
 	}
 
 	user, err := uac.uas.GetByEmail(input.Email)
@@ -99,7 +100,7 @@ func (uac *UserAuthController) SignIn(ctx *fiber.Ctx) error {
 		log.Printf("%s signin failed at GetByEmail: %v\n", input.Email, err.Error())
 		return ctx.
 			Status(http.StatusUnauthorized).
-			JSON(u.NewJError(u.ErrInvalidCredentials))
+			JSON(u.NewJError(e.ErrInvalidCredentials))
 	}
 	fmt.Println("----- Controller Before calling VerifyPassword -----")
 	err = sec.VerifyPassword(user.Password, input.Password)
@@ -107,7 +108,7 @@ func (uac *UserAuthController) SignIn(ctx *fiber.Ctx) error {
 		log.Printf("%s signin failed: %v\n", input.Email, err.Error())
 		return ctx.
 			Status(http.StatusUnauthorized).
-			JSON(u.NewJError(u.ErrInvalidCredentials))
+			JSON(u.NewJError(e.ErrInvalidCredentials))
 	}
 	fmt.Println("----- Controller Before calling GenerateNewToken -----")
 	token, err := sec.GenerateNewToken(user.Id.Hex())
@@ -176,7 +177,7 @@ func (uac *UserAuthController) PutUser(ctx *fiber.Ctx) error {
 	if !govalidator.IsEmail(update.Email) {
 		return ctx.
 			Status(http.StatusBadRequest).
-			JSON(u.NewJError(u.ErrInvalidEmail))
+			JSON(u.NewJError(e.ErrInvalidEmail))
 	}
 	fmt.Println(update.Email)
 	fmt.Println("!!!!!! Controller - PutUser - GetByEmail - Before")
@@ -210,7 +211,7 @@ func (uac *UserAuthController) PutUser(ctx *fiber.Ctx) error {
 	}
 	if exists != nil {
 		fmt.Println("------- email already exists ------")
-		err = u.ErrEmailAlreadyExists
+		err = e.ErrEmailAlreadyExists
 	}
 	fmt.Println("-------!!!!!!!!!!!!! Error befor return PutUser")
 	return ctx.
@@ -238,7 +239,7 @@ func (uac *UserAuthController) DeleteUser(ctx *fiber.Ctx) error {
 func AuthRequestWithId(ctx *fiber.Ctx) (*jwt.StandardClaims, error) {
 	id := ctx.Params("id")
 	if !primitive.IsValidObjectID(id) {
-		return nil, u.ErrUnauthorized
+		return nil, e.ErrUnauthorized
 	}
 	fmt.Println("------!!!!!!!!!!!!! AuthRequestWithId-- Before ----------")
 	token := ctx.Locals("user").(*jwt.Token)
@@ -249,7 +250,7 @@ func AuthRequestWithId(ctx *fiber.Ctx) (*jwt.StandardClaims, error) {
 	}
 	fmt.Println("------!!!!!!!!!!!!! AuthRequestWithId------------")
 	if payload.Id != id || payload.Issuer != id {
-		return nil, u.ErrUnauthorized
+		return nil, e.ErrUnauthorized
 	}
 	return payload, nil
 }

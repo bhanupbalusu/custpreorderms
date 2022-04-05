@@ -3,16 +3,16 @@ package user_auth
 import (
 	"net/http"
 
-	u "github.com/bhanupbalusu/custpreorderms/pkg/util/user_auth"
+	u "github.com/bhanupbalusu/custpreorderms/pkg/util"
 	sec "github.com/bhanupbalusu/custpreorderms/security/user_auth"
 
 	"github.com/gofiber/fiber/v2"
 	jwtware "github.com/gofiber/jwt/v2"
 )
 
-type Routes interface {
-	Install(app *fiber.App)
-}
+// type Routes interface {
+// 	Install(app *fiber.App)
+// }
 
 func AuthRequired(ctx *fiber.Ctx) error {
 	return jwtware.New(jwtware.Config{

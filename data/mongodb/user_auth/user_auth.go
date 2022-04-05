@@ -1,10 +1,10 @@
-package mongodb
+package user_auth
 
 import (
 	"context"
 	"fmt"
 
-	m "github.com/bhanupbalusu/custpreorderms/domain/model"
+	m "github.com/bhanupbalusu/custpreorderms/domain/model/user_auth"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -14,7 +14,7 @@ func (r *MongoRepository) Get() (m.UserList, error) {
 	var users m.UserList
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
-	coll := r.Client.Database(r.DB).Collection("cust_user_auth")
+	coll := r.Client.Database(r.DB).Collection("user_auth_coll1")
 	cursor, err := coll.Find(ctx, bson.M{})
 	if err = cursor.All(ctx, &users); err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (r *MongoRepository) GetByID(id string) (*m.User, error) {
 	var user m.User
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
-	coll := r.Client.Database(r.DB).Collection("cust_user_auth")
+	coll := r.Client.Database(r.DB).Collection("user_auth_coll1")
 	newId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (r *MongoRepository) GetByEmail(email string) (*m.User, error) {
 	var user m.User
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
-	coll := r.Client.Database(r.DB).Collection("cust_user_auth")
+	coll := r.Client.Database(r.DB).Collection("user_auth_coll1")
 	filter := bson.M{"email": email}
 	fmt.Println(coll)
 	fmt.Println(filter)
@@ -60,7 +60,7 @@ func (r *MongoRepository) GetByEmail(email string) (*m.User, error) {
 func (r *MongoRepository) Create(u *m.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
-	coll := r.Client.Database(r.DB).Collection("cust_user_auth")
+	coll := r.Client.Database(r.DB).Collection("user_auth_coll1")
 	fmt.Println("---------Mongodb.Create before calling coll.InsertOne---------")
 	_, err := coll.InsertOne(
 		ctx,
@@ -78,7 +78,7 @@ func (r *MongoRepository) Create(u *m.User) error {
 func (r *MongoRepository) Update(u *m.User) error {
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
-	coll := r.Client.Database(r.DB).Collection("cust_user_auth")
+	coll := r.Client.Database(r.DB).Collection("user_auth_coll1")
 	filter := bson.M{"_id": u.Id}
 	update := bson.M{
 		"$set": bson.M{
@@ -96,7 +96,7 @@ func (r *MongoRepository) Update(u *m.User) error {
 func (r *MongoRepository) Delete(id string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
-	coll := r.Client.Database(r.DB).Collection("cust_user_auth")
+	coll := r.Client.Database(r.DB).Collection("user_auth_coll1")
 	pid, err := primitive.ObjectIDFromHex(id)
 	_, err = coll.DeleteOne(ctx, bson.M{"_id": pid})
 	return err

@@ -1,4 +1,4 @@
-package mongodb
+package deal_settings
 
 import (
 	"context"
@@ -31,7 +31,7 @@ func newMongoClient(mongoURL string, mongoTimeout int) (*mongo.Client, error) {
 	return client, nil
 }
 
-func NewMongoRepository(mongoURL string, mongoDB string, mongoTimeout int) (repo.UserAuthRepoInterface, error) {
+func NewMongoRepository(mongoURL string, mongoDB string, mongoTimeout int) (repo.DealSettingsRepoInterface, error) {
 	repo := &MongoRepository{
 		DB:      mongoDB,
 		Timeout: time.Duration(mongoTimeout) * time.Second,

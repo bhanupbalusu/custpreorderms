@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/bhanupbalusu/custpreorderms/domain/model"
+	model "github.com/bhanupbalusu/custpreorderms/domain/model/user_auth"
 )
 
 type UserAuthServiceInterface interface {

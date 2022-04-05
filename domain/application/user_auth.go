@@ -5,7 +5,7 @@ import (
 
 	r "github.com/bhanupbalusu/custpreorderms/domain/application_interface/repo"
 	s "github.com/bhanupbalusu/custpreorderms/domain/application_interface/service"
-	m "github.com/bhanupbalusu/custpreorderms/domain/model"
+	m "github.com/bhanupbalusu/custpreorderms/domain/model/user_auth"
 )
 
 type userAuthService struct {
