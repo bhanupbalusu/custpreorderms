@@ -24,8 +24,8 @@ func main() {
 
 	errs := make(chan error, 2)
 	go func() {
-		fmt.Println("Listening on port :4003")
-		errs <- app.Listen(":4004")
+		fmt.Println("Listening on port :4005")
+		errs <- app.Listen(":4005")
 	}()
 
 	go func() {

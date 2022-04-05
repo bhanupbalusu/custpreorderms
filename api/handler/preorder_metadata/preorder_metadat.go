@@ -36,8 +36,8 @@ func (r *preOrderRoutesHandler) Delete(ctx *fiber.Ctx) error {
 }
 
 func (r *preOrderRoutesHandler) Install(app *fiber.App) {
-	app.Get("/products", r.GetAll)
-	app.Get("/products/:id", r.GetOne)
-	app.Post("/product", r.Create)
-	app.Delete("/product/:id", r.Delete)
+	app.Get("/preorder", r.GetAll)
+	app.Get("/preorder/:id", r.GetOne)
+	app.Post("/preorder", r.Create)
+	app.Delete("/preorder/:id", r.Delete)
 }
