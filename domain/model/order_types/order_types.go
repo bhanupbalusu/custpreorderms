@@ -4,77 +4,77 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type MinOrder struct {
-	Volume string `json:"volume,omitempty" bson:"volume,omitempty"`
-	Units  string `json:"units,omitempty" bson:"units,omitempty"`
+type IMinOrder struct {
+	IMinOrderVolume string `json:"min_order_volume,omitempty" bson:"min_order_volume,omitempty"`
+	IMinUnits       string `json:"min_order_units,omitempty" bson:"min_order_units,omitempty"`
 }
 
-type MaxOrder struct {
-	Volume string `json:"volume,omitempty" bson:"volume,omitempty"`
-	Units  string `json:"units,omitempty" bson:"units,omitempty"`
+type IMaxOrder struct {
+	IMaxOrderVolume string `json:"max_order_volume,omitempty" bson:"max_order_volume,omitempty"`
+	IMaxUnits       string `json:"max_order_units,omitempty" bson:"max_order_units,omitempty"`
 }
 
-type Individual struct {
-	MinOrder MinOrder `json:"min_order,omitempty" bson:"min_order,omitempty"`
-	MaxOrder MaxOrder `json:"max_order,omitempty" bson:"max_order,omitempty"`
+type OTIndividual struct {
+	IMinOrder IMinOrder `json:"i_min_order,omitempty" bson:"i_min_order,omitempty"`
+	IMaxOrder IMaxOrder `json:"i_max_order,omitempty" bson:"i_max_order,omitempty"`
 }
 
-type IndividualMinOrder struct {
-	Volume string `json:"volume,omitempty" bson:"volume,omitempty"`
-	Units  string `json:"units,omitempty" bson:"units,omitempty"`
+type GIndividualMinOrder struct {
+	IndividualMinOrderVolume string `json:"individual_min_order_volume,omitempty" bson:"individual_min_order_volume,omitempty"`
+	IndividualMinOrderUnits  string `json:"individual_min_order_units,omitempty" bson:"individual_min_order_units,omitempty"`
 }
 
-type SplitOptions struct {
-	GroupOwner string `json:"group_owner,omitempty" bson:"group_owner,omitempty"`
-	Type       string `json:"type,omitempty" bson:"type,omitempty"`
+type GMODSplitOptions struct {
+	SOGroupOwner string `json:"so_group_owner,omitempty" bson:"so_group_owner,omitempty"`
+	SOType       string `json:"so_type,omitempty" bson:"so_type,omitempty"`
 }
 
-type GroupDiscount struct {
-	Percentage   string       `json:"percentage,omitempty" bson:"percentage,omitempty"`
-	SplitOptions SplitOptions `json:"split_options,omitempty" bson:"split_options,omitempty"`
+type GroupMaxOrderDiscount struct {
+	GMODPercentage   string           `json:"gmod_percentage,omitempty" bson:"gmod_percentage,omitempty"`
+	GMODSplitOptions GMODSplitOptions `json:"gmod_split_options,omitempty" bson:"gmod_split_options,omitempty"`
 }
 
-type GroupMaxOrder struct {
-	Volume   string        `json:"volume,omitempty" bson:"volume,omitempty"`
-	Units    string        `json:"units,omitempty" bson:"units,omitempty"`
-	Discount GroupDiscount `json:"discount,omitempty" bson:"group_discount,omitempty"`
+type GGroupMaxOrder struct {
+	GroupMaxOrderVolume   string                `json:"group_max_order_volume,omitempty" bson:"group_max_order_volume,omitempty"`
+	GroupMaxOrderUnits    string                `json:"group_max_order_units,omitempty" bson:"group_max_order_units,omitempty"`
+	GroupMaxOrderDiscount GroupMaxOrderDiscount `json:"group_max_order_discount,omitempty" bson:"group_max_order_discount,omitempty"`
 }
 
 type AcceptOverSubscriptions struct {
-	Value                 string `json:"value,omitempty" bson:"value,omitempty"`
-	PercentageOnMaxVolume string `json:"percentage_on_max_volume,omitempty" bson:"percentage_on_max_volume,omitempty"`
+	AOSValue                 string `json:"aos_value,omitempty" bson:"aos_value,omitempty"`
+	AOSPercentageOnMaxVolume string `json:"aos_percentage_on_max_volume,omitempty" bson:"aos_percentage_on_max_volume,omitempty"`
 }
 
 type AcceptUnderSubscriptions struct {
-	Value                 string `json:"value,omitempty" bson:"value,omitempty"`
-	PercentageOnMaxVolume string `json:"percentage_on_max_volume,omitempty" bson:"percentage_on_max_volume,omitempty"`
+	AUSValue                 string `json:"aus_value,omitempty" bson:"aus_value,omitempty"`
+	AUSPercentageOnMaxVolume string `json:"aus_percentage_on_max_volume,omitempty" bson:"aus_percentage_on_max_volume,omitempty"`
 }
 
-type Discount struct {
-	Percentage string `json:"percentage,omitempty" bson:"percentage,omitempty"`
+type ASOSingleOrderDiscount struct {
+	ASOSODPercentage string `json:"sod_percentage,omitempty" bson:"sod_percentage,omitempty"`
 }
 
 type AcceptSingleOrder struct {
-	Value    string   `json:"value,omitempty" bson:"value,omitempty"`
-	Discount Discount `json:"discount,omitempty" bson:"discount,omitempty"`
+	ASOValue               string                 `json:"aso_value,omitempty" bson:"aso_value,omitempty"`
+	ASOSingleOrderDiscount ASOSingleOrderDiscount `json:"aso_single_order_discount,omitempty" bson:"aso_single_order_discount,omitempty"`
 }
 
-type Settings struct {
-	MustSatisfyMaxVolume     string                   `json:"must_satisfy_max_volume,omitempty" bson:"must_satisfy_max_volume,omitempty"`
-	AcceptOverSubscriptions  AcceptOverSubscriptions  `json:"accept_over_subscriptions,omitempty" bson:"accept_over_subscriptions,omitempty"`
-	AcceptUnderSubscriptions AcceptUnderSubscriptions `json:"accept_under_subscriptions,omitempty" bson:"accept_under_subscriptions,omitempty"`
-	AcceptSingleOrder        AcceptSingleOrder        `json:"accept_single_order,omitempty" bson:"accept_single_order,omitempty"`
+type GSettings struct {
+	MustSatisfyMaxVolume     string                   `json:"s_must_satisfy_max_volume,omitempty" bson:"s_must_satisfy_max_volume,omitempty"`
+	AcceptOverSubscriptions  AcceptOverSubscriptions  `json:"s_accept_over_subscriptions,omitempty" bson:"s_accept_over_subscriptions,omitempty"`
+	AcceptUnderSubscriptions AcceptUnderSubscriptions `json:"s_accept_under_subscriptions,omitempty" bson:"s_accept_under_subscriptions,omitempty"`
+	AcceptSingleOrder        AcceptSingleOrder        `json:"s_accept_single_order,omitempty" bson:"s_accept_single_order,omitempty"`
 }
 
-type Group struct {
-	IndividualMinOrder IndividualMinOrder `json:"individual_min_order,omitempty" bson:"individual_min_order,omitempty"`
-	MaxOrder           GroupMaxOrder      `json:"max_order,omitempty" bson:"max_order,omitempty"`
-	Settings           Settings           `json:"settings,omitempty" bson:"settings,omitempty"`
+type OTGroup struct {
+	GIndividualMinOrder GIndividualMinOrder `json:"g_individual_min_order,omitempty" bson:"g_individual_min_order,omitempty"`
+	GGroupMaxOrder      GGroupMaxOrder      `json:"g_max_order,omitempty" bson:"g_max_order,omitempty"`
+	GSettings           GSettings           `json:"g_settings,omitempty" bson:"g_settings,omitempty"`
 }
 
 type OrderTypes struct {
-	Individual Individual `json:"individual,omitempty" bson:"individual,omitempty"`
-	Group      Group      `json:"group,omitempty" bson:"group,omitempty"`
+	OTIndividual OTIndividual `json:"ot_individual,omitempty" bson:"ot_individual,omitempty"`
+	OTGroup      OTGroup      `json:"ot_group,omitempty" bson:"ot_group,omitempty"`
 }
 
 type OrderTypesModel struct {

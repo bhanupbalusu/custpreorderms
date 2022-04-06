@@ -5,17 +5,17 @@ import (
 )
 
 type AcceptOverSubscriptions struct {
-	Value                          string `json:"value,omitempty" bson:"value,omitempty"`
-	PercentageOnBulkQuantityVolume string `json:"percentage_on_bulk_quantity_volume,omitempty" bson:"percentage_on_bulk_quantity_volume,omitempty"`
+	AOSValue                          string `json:"aos_value,omitempty" bson:"aos_value,omitempty"`
+	AOSPercentageOnBulkQuantityVolume string `json:"aos_percentage_on_bulk_quantity_volume,omitempty" bson:"aos_percentage_on_bulk_quantity_volume,omitempty"`
 }
 
 type AcceptUnderSubscriptions struct {
-	Value                          string `json:"value,omitempty" bson:"value,omitempty"`
-	PercentageOnBulkQuantityVolume string `json:"percentage_on_bulk_quantity_volume,omitempty" bson:"percentage_on_bulk_quantity_volume,omitempty"`
+	AUSValue                          string `json:"aus_value,omitempty" bson:"value,omitempty"`
+	AUSPercentageOnBulkQuantityVolume string `json:"aus_percentage_on_bulk_quantity_volume,omitempty" bson:"aus_percentage_on_bulk_quantity_volume,omitempty"`
 }
 
 type ByPost struct {
-	Value   string `json:"value,omitempty" bson:"value,omitempty"`
+	BPValue string `json:"by_post_value,omitempty" bson:"value,omitempty"`
 	Charges string `json:"charges,omitempty" bson:"charges,omitempty"`
 }
 

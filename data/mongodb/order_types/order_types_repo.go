@@ -73,46 +73,46 @@ func (r *MongoRepository) Create(otm *model.OrderTypesModel) (string, error) {
 			"customer_id":          otm.CustomerId,
 			"product_id":           otm.ProductId,
 			"order_types": bson.M{
-				"individual": bson.M{
-					"min_order": bson.M{
-						"volume": otm.OrderTypes.Individual.MinOrder.Volume,
-						"units":  otm.OrderTypes.Individual.MinOrder.Units,
+				"ot_individual": bson.M{
+					"i_min_order": bson.M{
+						"min_order_volume": otm.OrderTypes.OTIndividual.IMinOrder.IMinOrderVolume,
+						"min_order_units":  otm.OrderTypes.OTIndividual.IMinOrder.IMinUnits,
 					},
-					"max_order": bson.M{
-						"volume": otm.OrderTypes.Individual.MaxOrder.Volume,
-						"units":  otm.OrderTypes.Individual.MaxOrder.Units,
+					"i_max_order": bson.M{
+						"max_order_volume": otm.OrderTypes.OTIndividual.IMaxOrder.IMaxOrderVolume,
+						"max_order_units":  otm.OrderTypes.OTIndividual.IMaxOrder.IMaxUnits,
 					},
 				},
-				"group": bson.M{
-					"individual_min_order": bson.M{
-						"volume": otm.OrderTypes.Group.IndividualMinOrder.Volume,
-						"units":  otm.OrderTypes.Group.IndividualMinOrder.Units,
+				"ot_group": bson.M{
+					"g_individual_min_order": bson.M{
+						"individual_min_order_volume": otm.OrderTypes.OTGroup.GIndividualMinOrder.IndividualMinOrderVolume,
+						"individual_min_order_units":  otm.OrderTypes.OTGroup.GIndividualMinOrder.IndividualMinOrderUnits,
 					},
-					"max_order": bson.M{
-						"volume": otm.OrderTypes.Group.MaxOrder.Volume,
-						"units":  otm.OrderTypes.Group.MaxOrder.Units,
-						"discount": bson.M{
-							"percentage": otm.OrderTypes.Group.MaxOrder.Discount.Percentage,
-							"split_options": bson.M{
-								"group_owner": otm.OrderTypes.Group.MaxOrder.Discount.SplitOptions.GroupOwner,
-								"type":        otm.OrderTypes.Group.MaxOrder.Discount.SplitOptions.Type,
+					"g_max_order": bson.M{
+						"group_max_order_volume": otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderVolume,
+						"group_max_order_units":  otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderUnits,
+						"group_max_order_discount": bson.M{
+							"gmod_percentage": otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderDiscount.GMODPercentage,
+							"gmod_split_options": bson.M{
+								"so_group_owner": otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderDiscount.GMODSplitOptions.SOGroupOwner,
+								"so_type":        otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderDiscount.GMODSplitOptions.SOType,
 							},
 						},
 					},
-					"settings": bson.M{
-						"must_satisfy_max_volume": otm.OrderTypes.Group.Settings.MustSatisfyMaxVolume,
-						"accept_over_subscriptions": bson.M{
-							"value":                    otm.OrderTypes.Group.Settings.AcceptOverSubscriptions.Value,
-							"percentage_on_max_volume": otm.OrderTypes.Group.Settings.AcceptOverSubscriptions.PercentageOnMaxVolume,
+					"g_settings": bson.M{
+						"s_must_satisfy_max_volume": otm.OrderTypes.OTGroup.GSettings.MustSatisfyMaxVolume,
+						"s_accept_over_subscriptions": bson.M{
+							"aos_value":                    otm.OrderTypes.OTGroup.GSettings.AcceptOverSubscriptions.AOSValue,
+							"aos_percentage_on_max_volume": otm.OrderTypes.OTGroup.GSettings.AcceptOverSubscriptions.AOSPercentageOnMaxVolume,
 						},
-						"accept_under_subscriptions": bson.M{
-							"value":                    otm.OrderTypes.Group.Settings.AcceptUnderSubscriptions.Value,
-							"percentage_on_max_volume": otm.OrderTypes.Group.Settings.AcceptUnderSubscriptions.PercentageOnMaxVolume,
+						"s_accept_under_subscriptions": bson.M{
+							"aus_value":                    otm.OrderTypes.OTGroup.GSettings.AcceptUnderSubscriptions.AUSValue,
+							"aus_percentage_on_max_volume": otm.OrderTypes.OTGroup.GSettings.AcceptUnderSubscriptions.AUSPercentageOnMaxVolume,
 						},
-						"accept_single_order": bson.M{
-							"value": otm.OrderTypes.Group.Settings.AcceptSingleOrder.Value,
-							"discount": bson.M{
-								"percentage": otm.OrderTypes.Group.Settings.AcceptSingleOrder.Discount.Percentage,
+						"s_accept_single_order": bson.M{
+							"aso_value": otm.OrderTypes.OTGroup.GSettings.AcceptSingleOrder.ASOValue,
+							"aso_single_order_discount": bson.M{
+								"sod_percentage": otm.OrderTypes.OTGroup.GSettings.AcceptSingleOrder.ASOSingleOrderDiscount.ASOSODPercentage,
 							},
 						},
 					},
@@ -142,24 +142,24 @@ func (r *MongoRepository) Update(otm *model.OrderTypesModel) error {
 			"pre_order_request_id": otm.PreOrderRequestId,
 			"customer_id":          otm.CustomerId,
 			"product_id":           otm.ProductId,
-			"order_types.individual.min_order.volume":                                        otm.OrderTypes.Individual.MinOrder.Volume,
-			"order_types.individual.min_order.units":                                         otm.OrderTypes.Individual.MinOrder.Units,
-			"order_types.individual.max_order.volume":                                        otm.OrderTypes.Individual.MaxOrder.Volume,
-			"order_types.individual.max_order.units":                                         otm.OrderTypes.Individual.MaxOrder.Units,
-			"order_types.group.individual_min_order.volume":                                  otm.OrderTypes.Group.IndividualMinOrder.Volume,
-			"order_types.group.individual_min_order.units":                                   otm.OrderTypes.Group.IndividualMinOrder.Units,
-			"order_types.group.max_order.volume":                                             otm.OrderTypes.Group.MaxOrder.Volume,
-			"order_types.group.max_order.units":                                              otm.OrderTypes.Group.MaxOrder.Units,
-			"order_types.group.max_order.discount.percentage":                                otm.OrderTypes.Group.MaxOrder.Discount.Percentage,
-			"order_types.group.max_order.discount.split_options.group_owner":                 otm.OrderTypes.Group.MaxOrder.Discount.SplitOptions.GroupOwner,
-			"order_types.group.max_order.discount.split_options.type":                        otm.OrderTypes.Group.MaxOrder.Discount.SplitOptions.Type,
-			"order_types.group.settings.must_satisfy_max_volume":                             otm.OrderTypes.Group.Settings.MustSatisfyMaxVolume,
-			"order_types.group.settings.accept_over_subscriptions.value":                     otm.OrderTypes.Group.Settings.AcceptOverSubscriptions.Value,
-			"order_types.group.settings.accept_over_subscriptions.percentage_on_max_volume":  otm.OrderTypes.Group.Settings.AcceptOverSubscriptions.PercentageOnMaxVolume,
-			"order_types.group.settings.accept_under_subscriptions.value":                    otm.OrderTypes.Group.Settings.AcceptUnderSubscriptions.Value,
-			"order_types.group.settings.accept_under_subscriptions.percentage_on_max_volume": otm.OrderTypes.Group.Settings.AcceptUnderSubscriptions.PercentageOnMaxVolume,
-			"order_types.group.settings.accept_single_order.value":                           otm.OrderTypes.Group.Settings.AcceptSingleOrder.Value,
-			"order_types.group.settings.accept_single_order.discount.percentage":             otm.OrderTypes.Group.Settings.AcceptSingleOrder.Discount.Percentage,
+			"order_types.ot_individual.i_min_order.min_order_volume":                                         otm.OrderTypes.OTIndividual.IMinOrder.IMinOrderVolume,
+			"order_types.ot_individual.i_min_order.min_order_units":                                          otm.OrderTypes.OTIndividual.IMinOrder.IMinUnits,
+			"order_types.ot_individual.i_max_order.max_order_volume":                                         otm.OrderTypes.OTIndividual.IMaxOrder.IMaxOrderVolume,
+			"order_types.ot_individual.i_max_order.max_order_units":                                          otm.OrderTypes.OTIndividual.IMaxOrder.IMaxUnits,
+			"order_types.ot_group.g_individual_min_order.individual_min_order_volume":                        otm.OrderTypes.OTGroup.GIndividualMinOrder.IndividualMinOrderVolume,
+			"order_types.ot_group.g_individual_min_order.individual_min_order_units":                         otm.OrderTypes.OTGroup.GIndividualMinOrder.IndividualMinOrderUnits,
+			"order_types.ot_group.g_max_order.group_max_order_volume":                                        otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderVolume,
+			"order_types.ot_group.g_max_order.group_max_order_units":                                         otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderUnits,
+			"order_types.ot_group.g_max_order.group_max_order_discount.gmod_percentage":                      otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderDiscount.GMODPercentage,
+			"order_types.ot_group.g_max_order.group_max_order_discount.gmod_split_options.so_group_owner":    otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderDiscount.GMODSplitOptions.SOGroupOwner,
+			"order_types.ot_group.g_max_order.group_max_order_discount.gmod_split_options.so_type":           otm.OrderTypes.OTGroup.GGroupMaxOrder.GroupMaxOrderDiscount.GMODSplitOptions.SOType,
+			"order_types.ot_group.g_settings.s_must_satisfy_max_volume":                                      otm.OrderTypes.OTGroup.GSettings.MustSatisfyMaxVolume,
+			"order_types.ot_group.g_settings.s_accept_over_subscriptions.aos_value":                          otm.OrderTypes.OTGroup.GSettings.AcceptOverSubscriptions.AOSValue,
+			"order_types.ot_group.g_settings.s_accept_over_subscriptions.aos_percentage_on_max_volume":       otm.OrderTypes.OTGroup.GSettings.AcceptOverSubscriptions.AOSPercentageOnMaxVolume,
+			"order_types.ot_group.g_settings.s_accept_under_subscriptions.aus_value":                         otm.OrderTypes.OTGroup.GSettings.AcceptUnderSubscriptions.AUSValue,
+			"order_types.ot_group.g_settings.s_accept_under_subscriptions.aus_percentage_on_max_volume":      otm.OrderTypes.OTGroup.GSettings.AcceptUnderSubscriptions.AUSPercentageOnMaxVolume,
+			"order_types.ot_group.g_settings.s_accept_single_order.aso_value":                                otm.OrderTypes.OTGroup.GSettings.AcceptSingleOrder.ASOValue,
+			"order_types.ot_group.g_settings.s_accept_single_order.aso_single_order_discount.sod_percentage": otm.OrderTypes.OTGroup.GSettings.AcceptSingleOrder.ASOSingleOrderDiscount.ASOSODPercentage,
 		},
 	}
 

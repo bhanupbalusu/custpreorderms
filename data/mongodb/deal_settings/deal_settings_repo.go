@@ -72,22 +72,22 @@ func (r *MongoRepository) Create(dsm *model.DealSettingsModel) (string, error) {
 			"pre_order_request_id": dsm.PreOrderRequestId,
 			"customer_id":          dsm.CustomerId,
 			"product_id":           dsm.ProductId,
-			"order_types_id":       dsm.DealSettingsId,
+			"order_types_id":       dsm.OrderTypesId,
 			"deal_settings": bson.M{
 				"must_satisfy_bulk_quantity_volume": dsm.DealSettings.MustSatisfyBulkQuantityVolume,
 				"accept_over_subscriptions": bson.M{
-					"value":                              dsm.DealSettings.AcceptOverSubscriptions.Value,
-					"percentage_on_bulk_quantity_volume": dsm.DealSettings.AcceptOverSubscriptions.PercentageOnBulkQuantityVolume,
+					"aos_value":                              dsm.DealSettings.AcceptOverSubscriptions.AOSValue,
+					"aos_percentage_on_bulk_quantity_volume": dsm.DealSettings.AcceptOverSubscriptions.AOSPercentageOnBulkQuantityVolume,
 				},
 				"accept_under_subscriptions": bson.M{
-					"value":                              dsm.DealSettings.AcceptUnderSubscriptions.Value,
-					"percentage_on_bulk_quantity_volume": dsm.DealSettings.AcceptUnderSubscriptions.PercentageOnBulkQuantityVolume,
+					"aus_value":                              dsm.DealSettings.AcceptUnderSubscriptions.AUSValue,
+					"aus_percentage_on_bulk_quantity_volume": dsm.DealSettings.AcceptUnderSubscriptions.AUSPercentageOnBulkQuantityVolume,
 				},
 				"delivery_options": bson.M{
 					"collection": dsm.DealSettings.DeliveryOptions.Collection,
 					"by_post": bson.M{
-						"value":   dsm.DealSettings.DeliveryOptions.ByPost.Value,
-						"charges": dsm.DealSettings.DeliveryOptions.ByPost.Charges,
+						"by_post_value": dsm.DealSettings.DeliveryOptions.ByPost.BPValue,
+						"charges":       dsm.DealSettings.DeliveryOptions.ByPost.Charges,
 					},
 				},
 				"payment_options": bson.M{
@@ -112,24 +112,24 @@ func (r *MongoRepository) Update(dsm *model.DealSettingsModel) error {
 	coll := r.Client.Database(r.DB).Collection("deal_settings_coll1")
 	fmt.Println(coll, ctx)
 
-	filter := bson.M{"_id": dsm.OrderTypesId}
+	filter := bson.M{"_id": dsm.DealSettingsId}
 
 	update := bson.M{
 		"$set": bson.M{
 			"pre_order_request_id": dsm.PreOrderRequestId,
 			"customer_id":          dsm.CustomerId,
 			"product_id":           dsm.ProductId,
-			"order_types_id":       dsm.DealSettingsId,
-			"deal_settings.must_satisfy_bulk_quantity_volume":                             dsm.DealSettings.MustSatisfyBulkQuantityVolume,
-			"deal_settings.accept_over_subscriptions.value":                               dsm.DealSettings.AcceptOverSubscriptions.Value,
-			"deal_settings.accept_over_subscriptions.percentage_on_bulk_quantity_volume":  dsm.DealSettings.AcceptOverSubscriptions.PercentageOnBulkQuantityVolume,
-			"deal_settings.accept_under_subscriptions.value":                              dsm.DealSettings.AcceptUnderSubscriptions.Value,
-			"deal_settings.accept_under_subscriptions.percentage_on_bulk_quantity_volume": dsm.DealSettings.AcceptUnderSubscriptions.PercentageOnBulkQuantityVolume,
-			"deal_settings.delivery_options.collection":                                   dsm.DealSettings.DeliveryOptions.Collection,
-			"deal_settings.delivery_options.by_post.value":                                dsm.DealSettings.DeliveryOptions.ByPost.Value,
-			"deal_settings.delivery_options.by_post.charges":                              dsm.DealSettings.DeliveryOptions.ByPost.Charges,
-			"deal_settings.payment_options.cash":                                          dsm.DealSettings.PaymentOptions.Cash,
-			"deal_settings.payment_options.digital":                                       dsm.DealSettings.PaymentOptions.Digital,
+			"order_types_id":       dsm.OrderTypesId,
+			"deal_settings.must_satisfy_bulk_quantity_volume":                                 dsm.DealSettings.MustSatisfyBulkQuantityVolume,
+			"deal_settings.accept_over_subscriptions.aos_value":                               dsm.DealSettings.AcceptOverSubscriptions.AOSValue,
+			"deal_settings.accept_over_subscriptions.aos_percentage_on_bulk_quantity_volume":  dsm.DealSettings.AcceptOverSubscriptions.AOSPercentageOnBulkQuantityVolume,
+			"deal_settings.accept_under_subscriptions.aus_value":                              dsm.DealSettings.AcceptUnderSubscriptions.AUSValue,
+			"deal_settings.accept_under_subscriptions.aus_percentage_on_bulk_quantity_volume": dsm.DealSettings.AcceptUnderSubscriptions.AUSPercentageOnBulkQuantityVolume,
+			"deal_settings.delivery_options.collection":                                       dsm.DealSettings.DeliveryOptions.Collection,
+			"deal_settings.delivery_options.by_post.by_post_value":                            dsm.DealSettings.DeliveryOptions.ByPost.BPValue,
+			"deal_settings.delivery_options.by_post.charges":                                  dsm.DealSettings.DeliveryOptions.ByPost.Charges,
+			"deal_settings.payment_options.cash":                                              dsm.DealSettings.PaymentOptions.Cash,
+			"deal_settings.payment_options.digital":                                           dsm.DealSettings.PaymentOptions.Digital,
 		},
 	}
 
