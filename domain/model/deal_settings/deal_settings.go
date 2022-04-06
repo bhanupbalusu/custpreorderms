@@ -45,5 +45,3 @@ type DealSettingsModel struct {
 	OrderTypesId      string             `json:"order_types_id,omitempty" bson:"order_types_id,omitempty"`
 	DealSettings      DealSettings       `json:"deal_settings,omitempty" bson:"deal_settings,omitempty"`
 }
-
-type DealSettingsModelList []*DealSettingsModel

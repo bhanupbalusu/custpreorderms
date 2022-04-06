@@ -14,7 +14,7 @@ func NewOrderTypesService(otri r.OrderTypesRepoInterface) s.OrderTypesServiceInt
 	return &orderTypesService{otri}
 }
 
-func (ots *orderTypesService) Get() (m.OrderTypesModelList, error) {
+func (ots *orderTypesService) Get() (*[]m.OrderTypesModel, error) {
 	return ots.otri.Get()
 }
 

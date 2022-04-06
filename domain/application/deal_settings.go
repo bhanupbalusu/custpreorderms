@@ -14,7 +14,7 @@ func NewDealSettingsService(dsri r.DealSettingsRepoInterface) s.DealSettingsServ
 	return &dealSettingsService{dsri}
 }
 
-func (dss *dealSettingsService) Get() (m.DealSettingsModelList, error) {
+func (dss *dealSettingsService) Get() (*[]m.DealSettingsModel, error) {
 	return dss.dsri.Get()
 }
 

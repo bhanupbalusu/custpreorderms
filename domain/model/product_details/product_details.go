@@ -7,7 +7,7 @@ import (
 type ProductDetails struct {
 	ProductName string `json:"product_name,omitempty" bson:"product_name,omitempty"`
 	Description string `json:"description,omitempty" bson:"description,omitempty"`
-	ImageUrl    string `json:"ImageUrl,omitempty" bson:"ImageUrl,omitempty"`
+	ImageURL    string `json:"image_url,omitempty" bson:"ImageUrl,omitempty"`
 }
 
 type BulkQuantity struct {
@@ -42,5 +42,3 @@ type ProductDetailsModel struct {
 	CreatedAt         int64              `json:"created_at,omitempty" bson:"created_at,omitempty"`
 	UpdatedAt         int64              `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
 }
-
-type ProductDetailsModelList []*ProductDetailsModel

@@ -43,6 +43,6 @@ func (r *dealSettingsRoutesHandler) Install(app *fiber.App) {
 	app.Get("/dealsettings", r.GetAll)
 	app.Get("/dealsettings/:id", r.GetOne)
 	app.Post("/dealsettings", r.Create)
-	app.Put("/dealsettings/:id", r.Update)
+	app.Put("/dealsettings", r.Update)
 	app.Delete("/dealsettings/:id", r.Delete)
 }

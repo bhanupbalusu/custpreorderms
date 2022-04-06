@@ -16,7 +16,7 @@ func NewProductDetailsService(pdri r.ProductDetailsRepoInterface) s.ProductDetai
 	return &productDetailsService{pdri}
 }
 
-func (pds *productDetailsService) Get() (m.ProductDetailsModelList, error) {
+func (pds *productDetailsService) Get() (*[]m.ProductDetailsModel, error) {
 	return pds.pdri.Get()
 }
 

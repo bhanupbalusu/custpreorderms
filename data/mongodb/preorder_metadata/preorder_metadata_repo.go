@@ -12,8 +12,8 @@ import (
 )
 
 // Get all products
-func (r *MongoRepository) Get() (model.PreOrderMetaDataModelList, error) {
-	var results model.PreOrderMetaDataModelList
+func (r *MongoRepository) Get() (*[]model.PreOrderMetaDataModel, error) {
+	var results []model.PreOrderMetaDataModel
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
@@ -21,15 +21,16 @@ func (r *MongoRepository) Get() (model.PreOrderMetaDataModelList, error) {
 	fmt.Println(coll)
 
 	cursor, err := coll.Find(ctx, bson.M{})
+	fmt.Println("--------Execution After Find method-----")
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println("--------Execution After Find method Before Iteration-----")
 	if err = cursor.All(ctx, &results); err != nil {
 		errors.Wrap(err, "db.repository.Get.cursor.All")
 		log.Fatal(err)
 	}
-	return results, nil
+	return &results, nil
 }
 
 // Get single product using id

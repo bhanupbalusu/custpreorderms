@@ -14,7 +14,7 @@ func NewPreOrderService(pori r.PreOrderRepoInterface) s.PreOrderServiceInterface
 	return &preOrderService{pori}
 }
 
-func (pos *preOrderService) Get() (m.PreOrderMetaDataModelList, error) {
+func (pos *preOrderService) Get() (*[]m.PreOrderMetaDataModel, error) {
 	return pos.pori.Get()
 }
 

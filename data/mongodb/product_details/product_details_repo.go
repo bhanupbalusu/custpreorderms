@@ -12,8 +12,8 @@ import (
 )
 
 // Get all products
-func (r *MongoRepository) Get() (model.ProductDetailsModelList, error) {
-	var results model.ProductDetailsModelList
+func (r *MongoRepository) Get() (*[]model.ProductDetailsModel, error) {
+	var results []model.ProductDetailsModel
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
@@ -29,7 +29,7 @@ func (r *MongoRepository) Get() (model.ProductDetailsModelList, error) {
 		errors.Wrap(err, "db.repository.Get.cursor.All")
 		log.Fatal(err)
 	}
-	return results, nil
+	return &results, nil
 }
 
 // Get single product using id
@@ -74,7 +74,7 @@ func (r *MongoRepository) Create(pm *model.ProductDetailsModel) (string, error) 
 			"product_details": bson.M{
 				"product_name": pm.ProductDetails.ProductName,
 				"description":  pm.ProductDetails.Description,
-				"ImageUrl":     pm.ProductDetails.ImageUrl,
+				"image_url":    pm.ProductDetails.ImageURL,
 			},
 			"quantity_details": bson.M{
 				"bulk_quantity": bson.M{
@@ -124,7 +124,7 @@ func (r *MongoRepository) Update(pm *model.ProductDetailsModel) error {
 			"customer_id":                           pm.CustomerId,
 			"product_details.product_name":          pm.ProductDetails.ProductName,
 			"product_details.description":           pm.ProductDetails.Description,
-			"product_details.ImageUrl":              pm.ProductDetails.ImageUrl,
+			"product_details.image_url":             pm.ProductDetails.ImageURL,
 			"quantity_details.bulk_quantity.volume": pm.QuantityDetails.BulkQuantity.Volume,
 			"quantity_details.bulk_quantity.units":  pm.QuantityDetails.BulkQuantity.Units,
 			"quantity_details.price.amount":         pm.QuantityDetails.Price.Amount,

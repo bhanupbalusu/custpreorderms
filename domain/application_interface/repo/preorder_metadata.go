@@ -5,7 +5,7 @@ import (
 )
 
 type PreOrderRepoInterface interface {
-	Get() (model.PreOrderMetaDataModelList, error)
+	Get() (*[]model.PreOrderMetaDataModel, error)
 	GetByID(id string) (*model.PreOrderMetaDataModel, error)
 	Create(pomd *model.PreOrderMetaDataModel) (string, error)
 	Delete(poid string) error

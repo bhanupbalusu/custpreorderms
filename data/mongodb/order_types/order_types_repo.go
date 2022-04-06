@@ -12,8 +12,8 @@ import (
 )
 
 // Get all products
-func (r *MongoRepository) Get() (model.OrderTypesModelList, error) {
-	var results model.OrderTypesModelList
+func (r *MongoRepository) Get() (*[]model.OrderTypesModel, error) {
+	var results []model.OrderTypesModel
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
@@ -29,7 +29,7 @@ func (r *MongoRepository) Get() (model.OrderTypesModelList, error) {
 		errors.Wrap(err, "db.repository.Get.cursor.All")
 		log.Fatal(err)
 	}
-	return results, nil
+	return &results, nil
 }
 
 // Get single product using id
@@ -163,7 +163,7 @@ func (r *MongoRepository) Update(otm *model.OrderTypesModel) error {
 		},
 	}
 
-	fmt.Println(update)
+	//fmt.Println(update)
 
 	_, err := coll.UpdateOne(ctx, filter, update)
 

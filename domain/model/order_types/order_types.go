@@ -84,5 +84,3 @@ type OrderTypesModel struct {
 	ProductId         string             `json:"product_id,omitempty" bson:"product_id,omitempty"`
 	OrderTypes        OrderTypes         `json:"order_types,omitempty" bson:"order_types,omitempty"`
 }
-
-type OrderTypesModelList []*OrderTypesModel

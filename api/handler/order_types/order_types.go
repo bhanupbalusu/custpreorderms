@@ -43,6 +43,6 @@ func (r *orderTypesRoutesHandler) Install(app *fiber.App) {
 	app.Get("/ordertypes", r.GetAll)
 	app.Get("/ordertypes/:id", r.GetOne)
 	app.Post("/ordertypes", r.Create)
-	app.Put("/ordertypes/:id", r.Update)
+	app.Put("/ordertypes", r.Update)
 	app.Delete("/ordertypes/:id", r.Delete)
 }

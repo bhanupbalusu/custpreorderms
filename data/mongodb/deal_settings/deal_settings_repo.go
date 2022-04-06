@@ -12,8 +12,8 @@ import (
 )
 
 // Get all products
-func (r *MongoRepository) Get() (model.DealSettingsModelList, error) {
-	var results model.DealSettingsModelList
+func (r *MongoRepository) Get() (*[]model.DealSettingsModel, error) {
+	var results []model.DealSettingsModel
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
@@ -29,7 +29,7 @@ func (r *MongoRepository) Get() (model.DealSettingsModelList, error) {
 		errors.Wrap(err, "db.repository.Get.cursor.All")
 		log.Fatal(err)
 	}
-	return results, nil
+	return &results, nil
 }
 
 // Get single product using id

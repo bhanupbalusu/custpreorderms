@@ -5,7 +5,7 @@ import (
 )
 
 type OrderTypesRepoInterface interface {
-	Get() (model.OrderTypesModelList, error)
+	Get() (*[]model.OrderTypesModel, error)
 	GetByID(id string) (*model.OrderTypesModel, error)
 	Create(otm *model.OrderTypesModel) (string, error)
 	Update(otm *model.OrderTypesModel) error

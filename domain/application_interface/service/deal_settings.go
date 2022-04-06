@@ -5,7 +5,7 @@ import (
 )
 
 type DealSettingsServiceInterface interface {
-	Get() (model.DealSettingsModelList, error)
+	Get() (*[]model.DealSettingsModel, error)
 	GetByID(id string) (*model.DealSettingsModel, error)
 	Create(pm *model.DealSettingsModel) (string, error)
 	Update(pm *model.DealSettingsModel) error
