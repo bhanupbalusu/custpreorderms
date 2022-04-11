@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	i "github.com/bhanupbalusu/custpreorderms/api/controller_interface"
 	s "github.com/bhanupbalusu/custpreorderms/domain/application_interface/service"
@@ -55,6 +56,8 @@ func (otc *OrderTypesController) Create(ctx *fiber.Ctx) error {
 
 	fmt.Println("------- Inside Handler Create Method Before Calling ProductService.Create -----------")
 	fmt.Println(req)
+	req.CreatedAt = time.Now()
+	req.UpdatedAt = req.CreatedAt
 	pid, err := otc.otsi.Create(&req)
 	if err != nil {
 		return ctx.
@@ -80,6 +83,7 @@ func (otc *OrderTypesController) Update(ctx *fiber.Ctx) error {
 	}
 
 	fmt.Println("-----------api/handler.Update Before calling h.ProductService.Update ----------")
+	req.UpdatedAt = time.Now()
 	if err := otc.otsi.Update(&req); err != nil {
 		return ctx.Status(500).JSON(fiber.Map{
 			"success": false,

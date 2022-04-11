@@ -41,15 +41,15 @@ func (r *MongoRepository) GetByID(id string) (*model.ProductDetailsModel, error)
 	coll := r.Client.Database(r.DB).Collection("product_details_coll1")
 	fmt.Println(coll)
 
-	newId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	filter := bson.M{"_id": newId}
+	// newId, err := primitive.ObjectIDFromHex(id)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	filter := bson.M{"pre_order_id": id}
 
-	fmt.Println(newId)
+	fmt.Println(id)
 	fmt.Println("------- Inside repository.GetByID Before Calling coll.FindOne -----------")
-	err = coll.FindOne(ctx, filter).Decode(&result)
+	err := coll.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return &result, err
 	}
@@ -57,7 +57,7 @@ func (r *MongoRepository) GetByID(id string) (*model.ProductDetailsModel, error)
 }
 
 // Create or insert a new product
-func (r *MongoRepository) Create(pm *model.ProductDetailsModel) (string, error) {
+func (r *MongoRepository) Create(pdm *model.ProductDetailsModel) (string, error) {
 	fmt.Println("------- Inside repository.Create Before Calling r.GetCollection -----------")
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
@@ -69,31 +69,31 @@ func (r *MongoRepository) Create(pm *model.ProductDetailsModel) (string, error) 
 	result, err := coll.InsertOne(
 		ctx,
 		bson.M{
-			"pre_order_request_id": pm.PreOrderRequestId,
-			"customer_id":          pm.CustomerId,
+			"pre_order_id": pdm.PreOrderId,
+			"customer_id":  pdm.CustomerId,
 			"product_details": bson.M{
-				"product_name": pm.ProductDetails.ProductName,
-				"description":  pm.ProductDetails.Description,
-				"image_url":    pm.ProductDetails.ImageURL,
+				"product_name": pdm.ProductDetails.ProductName,
+				"description":  pdm.ProductDetails.Description,
+				"image_url":    pdm.ProductDetails.ImageURL,
 			},
 			"quantity_details": bson.M{
 				"bulk_quantity": bson.M{
-					"volume": pm.QuantityDetails.BulkQuantity.Volume,
-					"units":  pm.QuantityDetails.BulkQuantity.Units,
+					"volume": pdm.QuantityDetails.BulkQuantity.Volume,
+					"units":  pdm.QuantityDetails.BulkQuantity.Units,
 				},
 				"price": bson.M{
-					"amount":   pm.QuantityDetails.Price.Amount,
-					"currency": pm.QuantityDetails.Price.Currency,
-					"per_unit": pm.QuantityDetails.Price.PerUnit,
-					"units":    pm.QuantityDetails.Price.Units,
+					"amount":   pdm.QuantityDetails.Price.Amount,
+					"currency": pdm.QuantityDetails.Price.Currency,
+					"per_unit": pdm.QuantityDetails.Price.PerUnit,
+					"units":    pdm.QuantityDetails.Price.Units,
 				},
 			},
 			"schedular": bson.M{
-				"start_date": pm.Schedular.StartDate,
-				"end_date":   pm.Schedular.EndDate,
+				"start_date": pdm.Schedular.StartDate,
+				"end_date":   pdm.Schedular.EndDate,
 			},
-			"created_at": pm.CreatedAt,
-			"updated_at": pm.UpdatedAt,
+			"created_at": pdm.CreatedAt,
+			"updated_at": pdm.UpdatedAt,
 		},
 	)
 	if err != nil {
@@ -104,7 +104,7 @@ func (r *MongoRepository) Create(pm *model.ProductDetailsModel) (string, error) 
 }
 
 // Update existing product
-func (r *MongoRepository) Update(pm *model.ProductDetailsModel) error {
+func (r *MongoRepository) Update(pdm *model.ProductDetailsModel) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
@@ -116,23 +116,24 @@ func (r *MongoRepository) Update(pm *model.ProductDetailsModel) error {
 	// 	log.Fatal(err)
 	// }
 
-	filter := bson.M{"_id": pm.ProductId}
+	filter := bson.M{"pre_order_id": pdm.PreOrderId}
 
 	update := bson.M{
 		"$set": bson.M{
-			"pre_order_request_id":                  pm.PreOrderRequestId,
-			"customer_id":                           pm.CustomerId,
-			"product_details.product_name":          pm.ProductDetails.ProductName,
-			"product_details.description":           pm.ProductDetails.Description,
-			"product_details.image_url":             pm.ProductDetails.ImageURL,
-			"quantity_details.bulk_quantity.volume": pm.QuantityDetails.BulkQuantity.Volume,
-			"quantity_details.bulk_quantity.units":  pm.QuantityDetails.BulkQuantity.Units,
-			"quantity_details.price.amount":         pm.QuantityDetails.Price.Amount,
-			"quantity_details.price.currency":       pm.QuantityDetails.Price.Currency,
-			"quantity_details.price.per_unit":       pm.QuantityDetails.Price.PerUnit,
-			"quantity_details.price.units":          pm.QuantityDetails.Price.Units,
-			"schedular.start_date":                  pm.Schedular.StartDate,
-			"schedular.end_date":                    pm.Schedular.EndDate,
+			"pre_order_id":                          pdm.PreOrderId,
+			"customer_id":                           pdm.CustomerId,
+			"product_details.product_name":          pdm.ProductDetails.ProductName,
+			"product_details.description":           pdm.ProductDetails.Description,
+			"product_details.image_url":             pdm.ProductDetails.ImageURL,
+			"quantity_details.bulk_quantity.volume": pdm.QuantityDetails.BulkQuantity.Volume,
+			"quantity_details.bulk_quantity.units":  pdm.QuantityDetails.BulkQuantity.Units,
+			"quantity_details.price.amount":         pdm.QuantityDetails.Price.Amount,
+			"quantity_details.price.currency":       pdm.QuantityDetails.Price.Currency,
+			"quantity_details.price.per_unit":       pdm.QuantityDetails.Price.PerUnit,
+			"quantity_details.price.units":          pdm.QuantityDetails.Price.Units,
+			"schedular.start_date":                  pdm.Schedular.StartDate,
+			"schedular.end_date":                    pdm.Schedular.EndDate,
+			"updated_at":                            pdm.UpdatedAt,
 		},
 	}
 
@@ -151,8 +152,8 @@ func (r *MongoRepository) Delete(id string) error {
 	coll := r.Client.Database(r.DB).Collection("product_details_coll1")
 	fmt.Println(coll)
 
-	pid, err := primitive.ObjectIDFromHex(id)
-	_, err = coll.DeleteOne(ctx, bson.M{"_id": pid})
+	//pid, err := primitive.ObjectIDFromHex(id)
+	_, err := coll.DeleteOne(ctx, bson.M{"pre_order_id": id})
 	if err != nil {
 		return err
 	}

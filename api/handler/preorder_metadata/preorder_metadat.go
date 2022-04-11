@@ -31,6 +31,10 @@ func (r *preOrderRoutesHandler) Create(ctx *fiber.Ctx) error {
 	return r.poci.Create(ctx)
 }
 
+func (r *preOrderRoutesHandler) Update(ctx *fiber.Ctx) error {
+	return r.poci.Update(ctx)
+}
+
 func (r *preOrderRoutesHandler) Delete(ctx *fiber.Ctx) error {
 	return r.poci.Delete(ctx)
 }
@@ -39,5 +43,6 @@ func (r *preOrderRoutesHandler) Install(app *fiber.App) {
 	app.Get("/preorder", r.GetAll)
 	app.Get("/preorder/:id", r.GetOne)
 	app.Post("/preorder", r.Create)
+	app.Put("/preorder", r.Update)
 	app.Delete("/preorder/:id", r.Delete)
 }

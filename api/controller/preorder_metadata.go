@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	i "github.com/bhanupbalusu/custpreorderms/api/controller_interface"
 	s "github.com/bhanupbalusu/custpreorderms/domain/application_interface/service"
@@ -55,6 +56,8 @@ func (pdc *PreOrderController) Create(ctx *fiber.Ctx) error {
 
 	fmt.Println("------- Inside Handler Create Method Before Calling ProductService.Create -----------")
 	fmt.Println(req)
+	req.CreatedAt = time.Now()
+	req.UpdatedAt = req.CreatedAt
 	pid, err := pdc.posi.Create(&req)
 	if err != nil {
 		return ctx.
@@ -65,6 +68,35 @@ func (pdc *PreOrderController) Create(ctx *fiber.Ctx) error {
 		Status(http.StatusOK).
 		JSON(pid)
 
+}
+
+func (poc *PreOrderController) Update(ctx *fiber.Ctx) error {
+	var req m.PreOrderMetaDataModel
+	fmt.Println("-----------api/handler.Update Before calling c.BodyParser ----------")
+	if err := ctx.BodyParser(&req); err != nil {
+		log.Println(err)
+		return ctx.Status(400).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to parse body",
+			"error":   err,
+		})
+	}
+
+	fmt.Println("-----------api/handler.Update Before calling h.ProductService.Update ----------")
+	req.UpdatedAt = time.Now()
+	if err := poc.posi.Update(&req); err != nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"success": false,
+			"message": "Product failed to update",
+			"error":   err.Error(),
+		})
+	}
+
+	fmt.Println("-----------api/handler.Update Before calling final return----------")
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"success": true,
+		"message": "Product updated successfully",
+	})
 }
 
 func (pdc *PreOrderController) Delete(ctx *fiber.Ctx) error {

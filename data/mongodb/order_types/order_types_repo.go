@@ -41,15 +41,16 @@ func (r *MongoRepository) GetByID(id string) (*model.OrderTypesModel, error) {
 	coll := r.Client.Database(r.DB).Collection("order_types_coll1")
 	fmt.Println(coll)
 
-	newId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	filter := bson.M{"_id": newId}
+	// newId, err := primitive.ObjectIDFromHex(id)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println(newId)
+	filter := bson.M{"pre_order_id": id}
+
+	fmt.Println(id)
 	fmt.Println("------- Inside repository.GetByID Before Calling coll.FindOne -----------")
-	err = coll.FindOne(ctx, filter).Decode(&result)
+	err := coll.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return &result, err
 	}
@@ -69,9 +70,9 @@ func (r *MongoRepository) Create(otm *model.OrderTypesModel) (string, error) {
 	result, err := coll.InsertOne(
 		ctx,
 		bson.M{
-			"pre_order_request_id": otm.PreOrderRequestId,
-			"customer_id":          otm.CustomerId,
-			"product_id":           otm.ProductId,
+			"pre_order_id": otm.PreOrderId,
+			"customer_id":  otm.CustomerId,
+			"product_id":   otm.ProductId,
 			"order_types": bson.M{
 				"ot_individual": bson.M{
 					"i_min_order": bson.M{
@@ -118,6 +119,8 @@ func (r *MongoRepository) Create(otm *model.OrderTypesModel) (string, error) {
 					},
 				},
 			},
+			"created_at": otm.CreatedAt,
+			"updated_at": otm.UpdatedAt,
 		},
 	)
 	if err != nil {
@@ -135,13 +138,13 @@ func (r *MongoRepository) Update(otm *model.OrderTypesModel) error {
 	coll := r.Client.Database(r.DB).Collection("order_types_coll1")
 	fmt.Println(coll, ctx)
 
-	filter := bson.M{"_id": otm.OrderTypesId}
+	filter := bson.M{"pre_order_id": otm.PreOrderId}
 
 	update := bson.M{
 		"$set": bson.M{
-			"pre_order_request_id": otm.PreOrderRequestId,
-			"customer_id":          otm.CustomerId,
-			"product_id":           otm.ProductId,
+			"pre_order_id": otm.PreOrderId,
+			"customer_id":  otm.CustomerId,
+			"product_id":   otm.ProductId,
 			"order_types.ot_individual.i_min_order.min_order_volume":                                         otm.OrderTypes.OTIndividual.IMinOrder.IMinOrderVolume,
 			"order_types.ot_individual.i_min_order.min_order_units":                                          otm.OrderTypes.OTIndividual.IMinOrder.IMinUnits,
 			"order_types.ot_individual.i_max_order.max_order_volume":                                         otm.OrderTypes.OTIndividual.IMaxOrder.IMaxOrderVolume,
@@ -160,6 +163,7 @@ func (r *MongoRepository) Update(otm *model.OrderTypesModel) error {
 			"order_types.ot_group.g_settings.s_accept_under_subscriptions.aus_percentage_on_max_volume":      otm.OrderTypes.OTGroup.GSettings.AcceptUnderSubscriptions.AUSPercentageOnMaxVolume,
 			"order_types.ot_group.g_settings.s_accept_single_order.aso_value":                                otm.OrderTypes.OTGroup.GSettings.AcceptSingleOrder.ASOValue,
 			"order_types.ot_group.g_settings.s_accept_single_order.aso_single_order_discount.sod_percentage": otm.OrderTypes.OTGroup.GSettings.AcceptSingleOrder.ASOSingleOrderDiscount.ASOSODPercentage,
+			"updated_at": otm.UpdatedAt,
 		},
 	}
 
@@ -178,8 +182,8 @@ func (r *MongoRepository) Delete(id string) error {
 	coll := r.Client.Database(r.DB).Collection("order_types_coll1")
 	fmt.Println(coll)
 
-	pid, err := primitive.ObjectIDFromHex(id)
-	_, err = coll.DeleteOne(ctx, bson.M{"_id": pid})
+	//pid, err := primitive.ObjectIDFromHex(id)
+	_, err := coll.DeleteOne(ctx, bson.M{"pre_order_id": id})
 	if err != nil {
 		return err
 	}

@@ -1,6 +1,8 @@
 package deal_settings
 
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -38,10 +40,12 @@ type DealSettings struct {
 }
 
 type DealSettingsModel struct {
-	DealSettingsId    primitive.ObjectID `json:"deal_settings_id,omitempty" bson:"_id,omitempty"`
-	PreOrderRequestId string             `json:"pre_order_request_id,omitempty" bson:"pre_order_request_id,omitempty"`
-	CustomerId        string             `json:"customer_id,omitempty" bson:"customer_id,omitempty"`
-	ProductId         string             `json:"product_id,omitempty" bson:"product_id,omitempty"`
-	OrderTypesId      string             `json:"order_types_id,omitempty" bson:"order_types_id,omitempty"`
-	DealSettings      DealSettings       `json:"deal_settings,omitempty" bson:"deal_settings,omitempty"`
+	DealSettingsId primitive.ObjectID `json:"deal_settings_id,omitempty" bson:"_id,omitempty"`
+	PreOrderId     string             `json:"pre_order_id,omitempty" bson:"pre_order_request_id,omitempty"`
+	CustomerId     string             `json:"customer_id,omitempty" bson:"customer_id,omitempty"`
+	ProductId      string             `json:"product_id,omitempty" bson:"product_id,omitempty"`
+	OrderTypesId   string             `json:"order_types_id,omitempty" bson:"order_types_id,omitempty"`
+	DealSettings   DealSettings       `json:"deal_settings,omitempty" bson:"deal_settings,omitempty"`
+	CreatedAt      time.Time          `json:"created_at" bson:"created_at"`
+	UpdatedAt      time.Time          `json:"updated_at" bson:"updated_at"`
 }

@@ -1,6 +1,8 @@
 package product_details
 
 import (
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -33,12 +35,12 @@ type Schedular struct {
 }
 
 type ProductDetailsModel struct {
-	ProductId         primitive.ObjectID `json:"product_id,omitempty" bson:"_id,omitempty"`
-	PreOrderRequestId string             `json:"pre_order_request_id,omitempty" bson:"pre_order_request_id,omitempty"`
-	CustomerId        string             `json:"customer_id,omitempty" bson:"customer_id,omitempty"`
-	ProductDetails    ProductDetails     `json:"product_details,omitempty" bson:"product_details,omitempty"`
-	QuantityDetails   QuantityDetails    `json:"quantity_details,omitempty" bson:"quantity_details,omitempty"`
-	Schedular         Schedular          `json:"schedular,omitempty" bson:"schedular,omitempty"`
-	CreatedAt         int64              `json:"created_at,omitempty" bson:"created_at,omitempty"`
-	UpdatedAt         int64              `json:"updated_at,omitempty" bson:"updated_at,omitempty"`
+	ProductId       primitive.ObjectID `json:"product_id,omitempty" bson:"_id,omitempty"`
+	PreOrderId      string             `json:"pre_order_id,omitempty" bson:"pre_order_request_id,omitempty"`
+	CustomerId      string             `json:"customer_id,omitempty" bson:"customer_id,omitempty"`
+	ProductDetails  ProductDetails     `json:"product_details,omitempty" bson:"product_details,omitempty"`
+	QuantityDetails QuantityDetails    `json:"quantity_details,omitempty" bson:"quantity_details,omitempty"`
+	Schedular       Schedular          `json:"schedular,omitempty" bson:"schedular,omitempty"`
+	CreatedAt       time.Time          `json:"created_at" bson:"created_at"`
+	UpdatedAt       time.Time          `json:"updated_at" bson:"updated_at"`
 }

@@ -58,7 +58,7 @@ func (r *MongoRepository) GetByID(id string) (*model.PreOrderMetaDataModel, erro
 }
 
 // Create or insert a new product
-func (r *MongoRepository) Create(pm *model.PreOrderMetaDataModel) (string, error) {
+func (r *MongoRepository) Create(pomd *model.PreOrderMetaDataModel) (string, error) {
 	fmt.Println("------- Inside repository.Create Before Calling r.GetCollection -----------")
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
@@ -70,7 +70,9 @@ func (r *MongoRepository) Create(pm *model.PreOrderMetaDataModel) (string, error
 	result, err := coll.InsertOne(
 		ctx,
 		bson.M{
-			"customer_id": pm.CustomerId,
+			"customer_id": pomd.CustomerId,
+			"created_at":  pomd.CreatedAt,
+			"updated_at":  pomd.UpdatedAt,
 		},
 	)
 	if err != nil {
@@ -78,6 +80,21 @@ func (r *MongoRepository) Create(pm *model.PreOrderMetaDataModel) (string, error
 	}
 	pid := (result.InsertedID).(primitive.ObjectID).Hex()
 	return pid, nil
+}
+
+func (r *MongoRepository) Update(pomd *model.PreOrderMetaDataModel) error {
+	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
+	defer cancel()
+	coll := r.Client.Database(r.DB).Collection("preorder_metadata_coll1")
+	filter := bson.M{"_id": pomd.PreOrderId}
+	update := bson.M{
+		"$set": bson.M{
+			"customer_id": pomd.CustomerId,
+			"updated_at":  pomd.UpdatedAt,
+		},
+	}
+	_, err := coll.UpdateOne(ctx, filter, update)
+	return err
 }
 
 func (r *MongoRepository) Delete(id string) error {

@@ -41,15 +41,16 @@ func (r *MongoRepository) GetByID(id string) (*model.DealSettingsModel, error) {
 	coll := r.Client.Database(r.DB).Collection("deal_settings_coll1")
 	fmt.Println(coll)
 
-	newId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		log.Fatal(err)
-	}
-	filter := bson.M{"_id": newId}
+	// newId, err := primitive.ObjectIDFromHex(id)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
-	fmt.Println(newId)
+	filter := bson.M{"pre_order_id": id}
+
+	fmt.Println(id)
 	fmt.Println("------- Inside repository.GetByID Before Calling coll.FindOne -----------")
-	err = coll.FindOne(ctx, filter).Decode(&result)
+	err := coll.FindOne(ctx, filter).Decode(&result)
 	if err != nil {
 		return &result, err
 	}
@@ -69,10 +70,10 @@ func (r *MongoRepository) Create(dsm *model.DealSettingsModel) (string, error) {
 	result, err := coll.InsertOne(
 		ctx,
 		bson.M{
-			"pre_order_request_id": dsm.PreOrderRequestId,
-			"customer_id":          dsm.CustomerId,
-			"product_id":           dsm.ProductId,
-			"order_types_id":       dsm.OrderTypesId,
+			"pre_order_id":   dsm.PreOrderId,
+			"customer_id":    dsm.CustomerId,
+			"product_id":     dsm.ProductId,
+			"order_types_id": dsm.OrderTypesId,
 			"deal_settings": bson.M{
 				"must_satisfy_bulk_quantity_volume": dsm.DealSettings.MustSatisfyBulkQuantityVolume,
 				"accept_over_subscriptions": bson.M{
@@ -95,6 +96,8 @@ func (r *MongoRepository) Create(dsm *model.DealSettingsModel) (string, error) {
 					"digital": dsm.DealSettings.PaymentOptions.Digital,
 				},
 			},
+			"created_at": dsm.CreatedAt,
+			"updated_at": dsm.UpdatedAt,
 		},
 	)
 	if err != nil {
@@ -112,14 +115,14 @@ func (r *MongoRepository) Update(dsm *model.DealSettingsModel) error {
 	coll := r.Client.Database(r.DB).Collection("deal_settings_coll1")
 	fmt.Println(coll, ctx)
 
-	filter := bson.M{"_id": dsm.DealSettingsId}
+	filter := bson.M{"pre_order_id": dsm.PreOrderId}
 
 	update := bson.M{
 		"$set": bson.M{
-			"pre_order_request_id": dsm.PreOrderRequestId,
-			"customer_id":          dsm.CustomerId,
-			"product_id":           dsm.ProductId,
-			"order_types_id":       dsm.OrderTypesId,
+			"pre_order_id":   dsm.PreOrderId,
+			"customer_id":    dsm.CustomerId,
+			"product_id":     dsm.ProductId,
+			"order_types_id": dsm.OrderTypesId,
 			"deal_settings.must_satisfy_bulk_quantity_volume":                                 dsm.DealSettings.MustSatisfyBulkQuantityVolume,
 			"deal_settings.accept_over_subscriptions.aos_value":                               dsm.DealSettings.AcceptOverSubscriptions.AOSValue,
 			"deal_settings.accept_over_subscriptions.aos_percentage_on_bulk_quantity_volume":  dsm.DealSettings.AcceptOverSubscriptions.AOSPercentageOnBulkQuantityVolume,
@@ -130,6 +133,7 @@ func (r *MongoRepository) Update(dsm *model.DealSettingsModel) error {
 			"deal_settings.delivery_options.by_post.charges":                                  dsm.DealSettings.DeliveryOptions.ByPost.Charges,
 			"deal_settings.payment_options.cash":                                              dsm.DealSettings.PaymentOptions.Cash,
 			"deal_settings.payment_options.digital":                                           dsm.DealSettings.PaymentOptions.Digital,
+			"updated_at":                                                                      dsm.UpdatedAt,
 		},
 	}
 
@@ -148,8 +152,8 @@ func (r *MongoRepository) Delete(id string) error {
 	coll := r.Client.Database(r.DB).Collection("deal_settings_coll1")
 	fmt.Println(coll)
 
-	pid, err := primitive.ObjectIDFromHex(id)
-	_, err = coll.DeleteOne(ctx, bson.M{"_id": pid})
+	//pid, err := primitive.ObjectIDFromHex(id)
+	_, err := coll.DeleteOne(ctx, bson.M{"pre_order_id": id})
 	if err != nil {
 		return err
 	}

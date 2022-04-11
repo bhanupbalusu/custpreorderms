@@ -22,8 +22,12 @@ func (pos *preOrderService) GetByID(id string) (*m.PreOrderMetaDataModel, error)
 	return pos.pori.GetByID(id)
 }
 
-func (pos *preOrderService) Create(pm *m.PreOrderMetaDataModel) (string, error) {
-	return pos.pori.Create(pm)
+func (pos *preOrderService) Create(pomd *m.PreOrderMetaDataModel) (string, error) {
+	return pos.pori.Create(pomd)
+}
+
+func (pos *preOrderService) Update(pomd *m.PreOrderMetaDataModel) error {
+	return pos.pori.Update(pomd)
 }
 
 func (pos *preOrderService) Delete(id string) error {
