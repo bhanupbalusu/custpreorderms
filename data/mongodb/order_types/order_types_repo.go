@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Get all products
 func (r *MongoRepository) Get() (*[]model.OrderTypesModel, error) {
 	var results []model.OrderTypesModel
 
@@ -32,7 +31,6 @@ func (r *MongoRepository) Get() (*[]model.OrderTypesModel, error) {
 	return &results, nil
 }
 
-// Get single product using id
 func (r *MongoRepository) GetByID(id string) (*model.OrderTypesModel, error) {
 	var result model.OrderTypesModel
 	fmt.Println("------- Inside repository.GetByID Before Calling r.GetCollection -----------")
@@ -40,11 +38,6 @@ func (r *MongoRepository) GetByID(id string) (*model.OrderTypesModel, error) {
 	defer cancel()
 	coll := r.Client.Database(r.DB).Collection("order_types_coll1")
 	fmt.Println(coll)
-
-	// newId, err := primitive.ObjectIDFromHex(id)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	filter := bson.M{"pre_order_id": id}
 
@@ -57,7 +50,6 @@ func (r *MongoRepository) GetByID(id string) (*model.OrderTypesModel, error) {
 	return &result, nil
 }
 
-// Create or insert a new product
 func (r *MongoRepository) Create(otm *model.OrderTypesModel) (string, error) {
 	fmt.Println("------- Inside repository.Create Before Calling r.GetCollection -----------")
 
@@ -130,7 +122,6 @@ func (r *MongoRepository) Create(otm *model.OrderTypesModel) (string, error) {
 	return pid, nil
 }
 
-// Update existing product
 func (r *MongoRepository) Update(otm *model.OrderTypesModel) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
@@ -167,8 +158,6 @@ func (r *MongoRepository) Update(otm *model.OrderTypesModel) error {
 		},
 	}
 
-	//fmt.Println(update)
-
 	_, err := coll.UpdateOne(ctx, filter, update)
 
 	return err
@@ -182,7 +171,6 @@ func (r *MongoRepository) Delete(id string) error {
 	coll := r.Client.Database(r.DB).Collection("order_types_coll1")
 	fmt.Println(coll)
 
-	//pid, err := primitive.ObjectIDFromHex(id)
 	_, err := coll.DeleteOne(ctx, bson.M{"pre_order_id": id})
 	if err != nil {
 		return err

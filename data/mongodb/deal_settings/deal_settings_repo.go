@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Get all products
 func (r *MongoRepository) Get() (*[]model.DealSettingsModel, error) {
 	var results []model.DealSettingsModel
 
@@ -32,7 +31,6 @@ func (r *MongoRepository) Get() (*[]model.DealSettingsModel, error) {
 	return &results, nil
 }
 
-// Get single product using id
 func (r *MongoRepository) GetByID(id string) (*model.DealSettingsModel, error) {
 	var result model.DealSettingsModel
 	fmt.Println("------- Inside repository.GetByID Before Calling r.GetCollection -----------")
@@ -40,11 +38,6 @@ func (r *MongoRepository) GetByID(id string) (*model.DealSettingsModel, error) {
 	defer cancel()
 	coll := r.Client.Database(r.DB).Collection("deal_settings_coll1")
 	fmt.Println(coll)
-
-	// newId, err := primitive.ObjectIDFromHex(id)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	filter := bson.M{"pre_order_id": id}
 
@@ -57,7 +50,6 @@ func (r *MongoRepository) GetByID(id string) (*model.DealSettingsModel, error) {
 	return &result, nil
 }
 
-// Create or insert a new product
 func (r *MongoRepository) Create(dsm *model.DealSettingsModel) (string, error) {
 	fmt.Println("------- Inside repository.Create Before Calling r.GetCollection -----------")
 
@@ -107,7 +99,6 @@ func (r *MongoRepository) Create(dsm *model.DealSettingsModel) (string, error) {
 	return pid, nil
 }
 
-// Update existing product
 func (r *MongoRepository) Update(dsm *model.DealSettingsModel) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
@@ -144,7 +135,6 @@ func (r *MongoRepository) Update(dsm *model.DealSettingsModel) error {
 	return err
 }
 
-// Delete an existing product
 func (r *MongoRepository) Delete(id string) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
@@ -152,7 +142,6 @@ func (r *MongoRepository) Delete(id string) error {
 	coll := r.Client.Database(r.DB).Collection("deal_settings_coll1")
 	fmt.Println(coll)
 
-	//pid, err := primitive.ObjectIDFromHex(id)
 	_, err := coll.DeleteOne(ctx, bson.M{"pre_order_id": id})
 	if err != nil {
 		return err

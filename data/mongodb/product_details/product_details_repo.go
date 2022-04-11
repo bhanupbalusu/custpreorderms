@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Get all products
 func (r *MongoRepository) Get() (*[]model.ProductDetailsModel, error) {
 	var results []model.ProductDetailsModel
 
@@ -32,7 +31,6 @@ func (r *MongoRepository) Get() (*[]model.ProductDetailsModel, error) {
 	return &results, nil
 }
 
-// Get single product using id
 func (r *MongoRepository) GetByID(id string) (*model.ProductDetailsModel, error) {
 	var result model.ProductDetailsModel
 	fmt.Println("------- Inside repository.GetByID Before Calling r.GetCollection -----------")
@@ -41,10 +39,6 @@ func (r *MongoRepository) GetByID(id string) (*model.ProductDetailsModel, error)
 	coll := r.Client.Database(r.DB).Collection("product_details_coll1")
 	fmt.Println(coll)
 
-	// newId, err := primitive.ObjectIDFromHex(id)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 	filter := bson.M{"pre_order_id": id}
 
 	fmt.Println(id)
@@ -103,18 +97,12 @@ func (r *MongoRepository) Create(pdm *model.ProductDetailsModel) (string, error)
 	return pid, nil
 }
 
-// Update existing product
 func (r *MongoRepository) Update(pdm *model.ProductDetailsModel) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
 	defer cancel()
 	coll := r.Client.Database(r.DB).Collection("product_details_coll1")
 	fmt.Println(coll, ctx)
-
-	// pid, err := primitive.ObjectIDFromHex(id)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
 
 	filter := bson.M{"pre_order_id": pdm.PreOrderId}
 
@@ -144,7 +132,6 @@ func (r *MongoRepository) Update(pdm *model.ProductDetailsModel) error {
 	return err
 }
 
-// Delete an existing product
 func (r *MongoRepository) Delete(id string) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), r.Timeout)
@@ -152,7 +139,6 @@ func (r *MongoRepository) Delete(id string) error {
 	coll := r.Client.Database(r.DB).Collection("product_details_coll1")
 	fmt.Println(coll)
 
-	//pid, err := primitive.ObjectIDFromHex(id)
 	_, err := coll.DeleteOne(ctx, bson.M{"pre_order_id": id})
 	if err != nil {
 		return err

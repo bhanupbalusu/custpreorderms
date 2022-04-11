@@ -11,7 +11,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-// Get all products
 func (r *MongoRepository) Get() (*[]model.PreOrderMetaDataModel, error) {
 	var results []model.PreOrderMetaDataModel
 
@@ -33,7 +32,6 @@ func (r *MongoRepository) Get() (*[]model.PreOrderMetaDataModel, error) {
 	return &results, nil
 }
 
-// Get single product using id
 func (r *MongoRepository) GetByID(id string) (*model.PreOrderMetaDataModel, error) {
 	var result model.PreOrderMetaDataModel
 	fmt.Println("------- Inside repository.GetByID Before Calling r.GetCollection -----------")
@@ -57,7 +55,6 @@ func (r *MongoRepository) GetByID(id string) (*model.PreOrderMetaDataModel, erro
 	return &result, nil
 }
 
-// Create or insert a new product
 func (r *MongoRepository) Create(pomd *model.PreOrderMetaDataModel) (string, error) {
 	fmt.Println("------- Inside repository.Create Before Calling r.GetCollection -----------")
 
